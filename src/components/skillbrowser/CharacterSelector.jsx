@@ -19,7 +19,10 @@ export default class CharacterSelector extends React.Component {
         Object.keys(allChars).forEach((char) => {
             this.chars.push(<MenuItem key={char} value={char} primaryText={allChars[char].name} />);
         });
-        this.chars.sort((a, b) => a.props.primaryText.localeCompare(b.props.primaryText));
+
+        // Make sure characters with numbers in names get sorted correctly ([1, 2, 11], not [1, 11, 2])
+        var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: "base"});
+        this.chars.sort((a, b) => collator.compare(a.props.primaryText, b.props.primaryText));
     }
 
     handleCharacterChange(event, index, value) {
