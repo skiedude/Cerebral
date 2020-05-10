@@ -28,7 +28,11 @@ export default class SpFarmingTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            characters: FarmCharacter.getAll(),
+            characters: Object.values(FarmCharacter.getAll()).sort((a, b) => {
+                var charA = Character.get(a.id);
+                var charB = Character.get(b.id);
+                return charB.getInjectorsReady(b.baseSp) - charA.getInjectorsReady(a.baseSp);
+            }),
             ticking: true,
             redirectPath: undefined
         };
