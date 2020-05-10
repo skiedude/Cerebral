@@ -33,6 +33,9 @@ export default class SpFarmingTable extends React.Component {
                 var charB = Character.get(b.id);
                 return charB.getInjectorsReady(b.baseSp) - charA.getInjectorsReady(a.baseSp);
             }),
+            injectorsReady: Object.values(FarmCharacter.getAll()).reduce((count, char) => {
+                return count + (Character.get(char.id).getInjectorsReady(char.baseSp));
+            }, 0),
             ticking: true,
             redirectPath: undefined
         };
@@ -93,7 +96,7 @@ export default class SpFarmingTable extends React.Component {
                             Total SP
                         </TableHeaderColumn>
                         <TableHeaderColumn>
-                            Injectors Ready<br/>
+                            {this.state.injectorsReady} Injectors Ready<br/>
                             Time Until Next Injector
                         </TableHeaderColumn>
                         <TableHeaderColumn>
