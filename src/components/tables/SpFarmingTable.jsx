@@ -31,12 +31,20 @@ export default class SpFarmingTable extends React.Component {
             characters: Object.values(FarmCharacter.getAll()).sort((a, b) => {
                 var charA = Character.get(a.id);
                 var charB = Character.get(b.id);
-                return charB.getInjectorsReady(b.baseSp) - charA.getInjectorsReady(a.baseSp);
+
+                var countSort = charB.getInjectorsReady(b.baseSp) - charA.getInjectorsReady(a.baseSp);  // Descending
+                
+                const MAX_DATE = new Date(8640000000000000);
+                var nextCharB = charB.getNextInjectorDate(b.baseSp) || MAX_DATE;
+                var nextCharA = charA.getNextInjectorDate(a.baseSp) || MAX_DATE;
+                var timeSort = nextCharA - nextCharB;  // Ascending
+
+                return countSort || timeSort;
             }),
             injectorsReady: Object.values(FarmCharacter.getAll()).reduce((count, char) => {
                 return count + (Character.get(char.id).getInjectorsReady(char.baseSp));
             }, 0),
-            ticking: true,
+            ticking: false,
             redirectPath: undefined
         };
     }
