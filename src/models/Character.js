@@ -119,7 +119,7 @@ class Character {
         const spNeeded = nextInjectorTotalSp - currentSp;
         const millisecondsToTrainSp = spNeeded / this.getCurrentSpPerMillisecond();
 
-        return new Date(new Date().getTime() + millisecondsToTrainSp);
+        return isFinite(millisecondsToTrainSp) ? new Date(new Date().getTime() + millisecondsToTrainSp) : undefined;
     }
 
     /**
