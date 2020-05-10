@@ -4,7 +4,7 @@ import React from 'react';
 import {Redirect} from 'react-router';
 
 import Character from '../../models/Character';
-import DateTimeHelper from '../../helpers/DateTimeHelper';
+import EveCountdownTimer from '../widgets/EveCountdownTimer';
 
 import Avatar from 'material-ui/Avatar';
 import {Table, TableBody, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -24,30 +24,16 @@ export default class CharactersOverviewTable extends React.Component {
         super(props);
         this.state = {
             characters: Object.values(Character.getAll()).sort((a, b) => b.getTotalSp() - a.getTotalSp()),
-            ticking: true,
             redirectPath: undefined
         };
     }
 
     componentDidMount() {
-        this.timerId = setInterval(
-            () => this.tick(),
-            1000
-        );
-
         this.subscriberId = Character.subscribe(this);
     }
 
     componentWillUnmount() {
-        clearInterval(this.timerId);
-
         Character.unsubscribe(this.subscriberId);
-    }
-
-    tick() {
-        if (this.state.ticking) {
-            this.forceUpdate();
-        }
     }
 
     handleClick(e, characterId) {
@@ -116,7 +102,7 @@ export default class CharactersOverviewTable extends React.Component {
 
                                 <TableRowColumn>
                                     {currentSkill !== undefined ? `${currentSkill.skill_name} ${currentSkill.finished_level}` : "Not Training"}<br/>
-                                    {currentSkill !== undefined ? DateTimeHelper.timeUntil(new Date(currentSkill.finish_date)) : ""}
+                                    {currentSkill !== undefined ? <EveCountdownTimer endDate={new Date(currentSkill.finish_date)} /> : ""}
                                 </TableRowColumn>
                             </TableRow>
                         );

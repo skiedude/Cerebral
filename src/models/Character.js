@@ -44,7 +44,7 @@ class Character {
     getCurrentSkill() {
         const currentDate = new Date();
 
-        for(let o of this.skillQueue) {
+        for (let o of this.skillQueue) {
             if ((o.hasOwnProperty('finish_date')) && (new Date(o.finish_date) > currentDate)) {
                 return o;
             }
@@ -73,7 +73,7 @@ class Character {
         let lastDate = new Date();
         let lastSkill = undefined;
 
-        for(let o of this.skillQueue) {
+        for (let o of this.skillQueue) {
             if ((o.hasOwnProperty('finish_date')) && (new Date(o.finish_date) > lastDate)) {
                 lastSkill = o;
                 lastDate = new Date(o.finish_date);
@@ -149,7 +149,7 @@ class Character {
 
         const finishedSkills = this.getFinishedSkillsInQueue();
         const finishedSkillIds = finishedSkills.map(o => o.skill_id);
-        for(let skill of this.skills) {
+        for (let skill of this.skills) {
             if (skill.skill_id === currentSkill.skill_id) {
                 let startingMilliseconds = new Date(currentSkill.start_date).getTime();
                 let millisecondsPassed = new Date().getTime() - startingMilliseconds;
@@ -158,7 +158,7 @@ class Character {
             } else if (finishedSkillIds.includes(skill.skill_id)) {
                 const queueEntries = finishedSkills.filter(o => o.skill_id === skill.skill_id);
 
-                for(let queueEntry of queueEntries) {
+                for (let queueEntry of queueEntries) {
                     totalSp += (queueEntry.level_end_sp - queueEntry.training_start_sp);
                 }
 
@@ -185,8 +185,7 @@ class Character {
         // if they have any skills with a higher active level than the maximum alpha level, must be omega
 
         if (this.skills.find(o => o.active_skill_level > 0 &&
-                (
-                    !alphaSkillSet.hasOwnProperty(o.skill_name) ||
+                (!alphaSkillSet.hasOwnProperty(o.skill_name) ||
                     o.active_skill_level > alphaSkillSet[o.skill_name]
                 )
             ) !== undefined) {
@@ -195,7 +194,7 @@ class Character {
 
         // if they have any skills starting >24 hours in the future with a scheduled finish date, must be omega
         if (this.skills.find(o =>
-                (new Date(o.start_date).getTime()) > (new Date().getTime() + 24*60*60) &&
+                (new Date(o.start_date).getTime()) > (new Date().getTime() + 24 * 60 * 60) &&
                 o.hasOwnProperty('finish_date')
             ) !== undefined) {
             return true;
@@ -272,7 +271,7 @@ class Character {
     buildSkillTree() {
         let groups = {};
 
-        for(const skill of this.skills) {
+        for (const skill of this.skills) {
             if (!groups.hasOwnProperty(skill.skill_group_name)) {
                 groups[skill.skill_group_name] = [];
             }
@@ -281,7 +280,7 @@ class Character {
         }
 
         let groupsArray = [];
-        for(const groupName in groups) {
+        for (const groupName in groups) {
             if (groups.hasOwnProperty(groupName)) {
                 let skills = groups[groupName];
                 skills.sort((a, b) => a.skill_name.localeCompare(b.skill_name));
@@ -389,9 +388,9 @@ class Character {
 
             const spRequirements = {};
             spRequirements[0] = [0];
-            for(const a of [1, 2, 3, 4, 5]) {
+            for (const a of[1, 2, 3, 4, 5]) {
                 spRequirements[a] = [];
-                for(const b of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) {
+                for (const b of[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) {
                     const x = Math.round(250 * b * Math.pow(Math.sqrt(32), a - 1));
                     spRequirements[a].push(x);
                     spRequirements[a].push(x + 1);
@@ -456,7 +455,7 @@ class Character {
             let implantIds = await client.get('characters/' + this.id + '/implants', 'v1');
             this.implants = [];
             for (let id of implantIds) {
-                this.implants.push({id: id});
+                this.implants.push({ id: id });
             }
 
             let promises = this.implants.map((o) => {
@@ -506,7 +505,7 @@ class Character {
 
                 jumpClone.implants = [];
                 for (let id of jumpCloneData.implants) {
-                    jumpClone.implants.push({id: id});
+                    jumpClone.implants.push({ id: id });
                 }
 
                 Array.prototype.push.apply(promises, jumpClone.implants.map((o) => {
@@ -635,7 +634,7 @@ class Character {
                 );
 
                 this.loyalty_points = [];
-                for(let o of data) {
+                for (let o of data) {
                     if (o.loyalty_points > 0) {
                         o.corporation = await client.get('corporations/' + o.corporation_id, 'v4');
                         this.loyalty_points.push(o);
@@ -667,7 +666,7 @@ class Character {
 
                 let resolver = new BulkIdResolver();
                 this.contractSlotsUsed = 0;
-                for(let contract of this.contracts) {
+                for (let contract of this.contracts) {
                     resolver.addId(contract.issuer_id);
                     resolver.addId(contract.issuer_corporation_id);
                     resolver.addId(contract.assignee_id);
@@ -686,7 +685,7 @@ class Character {
 
                 await resolver.resolve();
 
-                for(let contract of this.contracts) {
+                for (let contract of this.contracts) {
                     contract.issuer = resolver.get(contract.issuer_id);
                     contract.issuer_corporation = resolver.get(contract.issuer_corporation_id);
                     contract.assignee = resolver.get(contract.assignee_id);
@@ -741,7 +740,7 @@ class Character {
             this.save();
         }
     }
-    
+
     async refreshMailingLists() {
         if (this.shouldRefresh('mailinglists')) {
             const client = new EsiClient();
@@ -780,7 +779,7 @@ class Character {
                 const resolver = new BulkIdResolver();
                 for (const mail of this.mails) {
                     // "Welcome" mail from a mailing list, mailing lists will not resolve
-                    if (mail.recipients[0].recipient_type === 'mailing_list' && mail.recipients[0].recipient_id == mail.from){
+                    if (mail.recipients[0].recipient_type === 'mailing_list' && mail.recipients[0].recipient_id == mail.from) {
                         mail.from_name = 'Welcome ML';
                     } else {
                         resolver.addId(mail.from);
@@ -852,7 +851,7 @@ class Character {
                         }
                     }
 
-                    mail.body = await MailBodyHelper.retrieveMailBody(mail.mail_id,client,this.id)
+                    mail.body = await MailBodyHelper.retrieveMailBody(mail.mail_id, client, this.id)
                 }
 
                 this.markRefreshed('mails');
@@ -884,7 +883,7 @@ class Character {
      * @param {string} reason - failure reason: 'scope', 'token', 'client', 'error'
      * @param {boolean} temporary - if true, failure is expected to only be temporary
      */
-    markTypeFailed(type, reason, temporary=false) {
+    markTypeFailed(type, reason, temporary = false) {
         this.nextRefreshes[type] = {
             last: new Date(),
             do: temporary ? new Date(new Date().getTime() + (300 * 1000)) : undefined,
@@ -898,8 +897,8 @@ class Character {
      * @param {string} reason - failure reason: 'scope', 'token', 'client', 'error'
      * @param {boolean} temporary - if true, failure is expected to only be temporary
      */
-    markFailed(reason, temporary=false) {
-        for(const type in this.nextRefreshes) {
+    markFailed(reason, temporary = false) {
+        for (const type in this.nextRefreshes) {
             if (this.nextRefreshes.hasOwnProperty(type)) {
                 this.markTypeFailed(type, reason, temporary);
             }
@@ -935,7 +934,7 @@ class Character {
         };
 
         // TODO: clean this up jfc
-        for(const key in translations) {
+        for (const key in translations) {
             if ((this.nextRefreshes.hasOwnProperty(key)) && (translations.hasOwnProperty(key))) {
                 let las;
                 if (this.nextRefreshes[key].error === undefined) {
@@ -943,7 +942,7 @@ class Character {
                     las = (lastDate.getTime() + 5000 < new Date().getTime()) ?
                         DateTimeHelper.timeSince(lastDate) + " ago" : "Just now";
                 } else {
-                    switch(this.nextRefreshes[key].error) {
+                    switch (this.nextRefreshes[key].error) {
                         case 'scope':
                             las = 'No Scope';
                             break;
@@ -1009,7 +1008,7 @@ class Character {
 
         try {
             await Promise.all(promises);
-        } catch(err) {}
+        } catch (err) {}
 
         Character.pushToSubscribers();
     }
@@ -1022,10 +1021,10 @@ class Character {
         let contracts = [];
         let contractIds = [];
 
-        for(const id in characters) {
+        for (const id in characters) {
             if (characters.hasOwnProperty(id)) {
                 if (characters[id].hasOwnProperty('contracts') && characters[id].contracts !== undefined) {
-                    for(const contract of characters[id].contracts) {
+                    for (const contract of characters[id].contracts) {
                         if (complete !== undefined) {
                             if ((complete === true) && (!appProperties.contract_completed_statuses.includes(contract.status))) {
                                 continue;
@@ -1102,18 +1101,15 @@ class Character {
     }
 
     static suspendSubscribers() {
-        for(let component of subscribedComponents) {
-            if (component !== null) {
-                component.setState({'ticking': false});
-            }
+        for (let component of subscribedComponents) {
+            if (component !== null) {}
         }
     }
 
     static pushToSubscribers() {
-        for(let component of subscribedComponents) {
+        for (let component of subscribedComponents) {
             if (component !== null) {
-                component.setState({'characters': Object.values(Character.getAll()).sort((a, b) => b.getTotalSp() - a.getTotalSp())});
-                component.setState({'ticking': true});
+                component.setState({ 'characters': Object.values(Character.getAll()).sort((a, b) => b.getTotalSp() - a.getTotalSp()) });
             }
         }
     }
