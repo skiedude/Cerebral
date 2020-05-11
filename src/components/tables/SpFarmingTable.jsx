@@ -68,7 +68,16 @@ export default class SpFarmingTable extends React.Component {
         FarmHelper.deleteFarm(characterId);
 
         this.forceUpdate();
-    };
+    }
+
+    renderSpHour(char)
+    {
+        const spHour = char.getCurrentSpPerHour();
+        const maxSpHour = char.getMaxSpPerHour();
+        const spWarning = `Not training at max speed!  Could be ${maxSpHour.toLocaleString()} SP/hour`;
+
+        return (<span>{spHour < maxSpHour && <span title={spWarning}>⚠ </span>}{spHour.toLocaleString()}</span>);
+    }
 
     render() {
         if (this.state.redirectPath !== undefined) {
@@ -144,7 +153,7 @@ export default class SpFarmingTable extends React.Component {
                                 </TableRowColumn>
 
                                 <TableRowColumn>
-                                    {currentSkill !== undefined ? char.getCurrentSpPerHour() : "Not Training"}<br/>
+                                    {currentSkill !== undefined ?  this.renderSpHour(char) : "Not Training"}<br/>
                                     {currentSkill !== undefined ? <EveCountdownTimer endDate={new Date(char.getLastSkill().finish_date)} /> : ""}
                                 </TableRowColumn>
 

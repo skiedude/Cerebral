@@ -100,6 +100,11 @@ class Character {
         return Math.round(this.getCurrentSpPerMillisecond() * 1000 * 3600);
     }
 
+    getMaxSpPerHour() {
+        // Assuming best remap and Omega with +5s or Alpha with +3s
+        return this.isOmega() ? 2700 : 1260;
+    }
+
     getInjectorsReady(baseSp) {
         if (baseSp === undefined) {
             baseSp = 5000000;
