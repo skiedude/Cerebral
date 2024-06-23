@@ -29,7 +29,7 @@ export default class StructureHelper {
             )
         ) {
             try {
-                things[id] = await client.get('universe/structures/' + id, 'v1');
+                things[id] = await client.get('universe/structures/' + id, 'v2');
 
                 // ccp can't seem to make up their minds between "system_id" and "solar_system_id"
                 // we're going with "system_id" EVERYWHERE in this app

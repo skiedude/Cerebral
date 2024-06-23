@@ -22,7 +22,7 @@ export default class BulkIdResolver {
             }
 
             const client = new EsiClient();
-            const res = await client.post('universe/names', 'v2', [], {
+            const res = await client.post('universe/names', 'v3', [], {
                 body: this.ids
             });
 

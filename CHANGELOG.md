@@ -1,3 +1,9 @@
+2024-06-22 0.8.2
+-------------------------
+* Fixed all route versions that have changed
+* Updated client_id to a more recent client id
+* Also includes the open PR from TomRichters fork changes https://github.com/PrometheusSatyen/Cerebral/pull/28
+
 2019-01-21: 0.8.1
 -------------------------
 * Fixed serious bug where certain characters authorized via the new SSOv2 would show tokens as dying when they were in fact fine.

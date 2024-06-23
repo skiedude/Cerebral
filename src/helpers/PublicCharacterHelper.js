@@ -17,7 +17,7 @@ export default class PublicCharacterHelper {
 
         if (!things.hasOwnProperty(id)) {
             let client = new EsiClient();
-            things[id] = await client.get('characters/' + id, 'v4');
+            things[id] = await client.get('characters/' + id, 'v5');
             PublicCharacterHelper.save();
         }
 

@@ -344,7 +344,7 @@ class Character {
     async refreshInfo() {
         if (this.shouldRefresh('character_info')) {
             let client = new EsiClient();
-            let charData = await client.get('characters/' + this.id, 'v4');
+            let charData = await client.get('characters/' + this.id, 'v5');
             Object.assign(this, charData);
             this.save();
             this.markRefreshed('character_info');
@@ -354,7 +354,7 @@ class Character {
     async refreshPortrait() {
         if (this.shouldRefresh('portrait')) {
             let client = new EsiClient();
-            this.portraits = await client.get('characters/' + this.id + '/portrait', 'v2');
+            this.portraits = await client.get('characters/' + this.id + '/portrait', 'v3');
             this.save();
             this.markRefreshed('portrait');
         }
@@ -363,7 +363,7 @@ class Character {
     async refreshCorporation() {
         if (this.shouldRefresh('corporation')) {
             let client = new EsiClient();
-            this.corporation = await client.get('corporations/' + this.corporation_id, 'v4');
+            this.corporation = await client.get('corporations/' + this.corporation_id, 'v5');
             this.save();
             this.markRefreshed('corporation');
         }
@@ -373,7 +373,7 @@ class Character {
         if (this.shouldRefresh('alliance')) {
             if (this.alliance_id !== undefined) {
                 let client = new EsiClient();
-                this.alliance = await client.get('alliances/' + this.alliance_id, 'v3');
+                this.alliance = await client.get('alliances/' + this.alliance_id, 'v4');
                 this.save();
                 this.markRefreshed('alliance');
             }
@@ -457,7 +457,7 @@ class Character {
             let client = new EsiClient();
             await client.authChar(AuthorizedCharacter.get(this.id));
 
-            let implantIds = await client.get('characters/' + this.id + '/implants', 'v1');
+            let implantIds = await client.get('characters/' + this.id + '/implants', 'v2');
             this.implants = [];
             for (let id of implantIds) {
                 this.implants.push({ id: id });
@@ -483,7 +483,7 @@ class Character {
             let client = new EsiClient();
             await client.authChar(AuthorizedCharacter.get(this.id));
 
-            let cloneData = await client.get('characters/' + this.id + '/clones', 'v3');
+            let cloneData = await client.get('characters/' + this.id + '/clones', 'v4');
 
             // last jump
             this.last_clone_jump_date = cloneData.last_clone_jump_date;
@@ -561,7 +561,7 @@ class Character {
             let client = new EsiClient();
             await client.authChar(AuthorizedCharacter.get(this.id));
 
-            this.location = await client.get('characters/' + this.id + '/location', 'v1');
+            this.location = await client.get('characters/' + this.id + '/location', 'v2');
 
             // standardising solar_system_id --> system_id since ccp is indecisive
             this.location.system_id = this.location.solar_system_id;
@@ -591,7 +591,7 @@ class Character {
             let client = new EsiClient();
             await client.authChar(AuthorizedCharacter.get(this.id));
 
-            this.ship = await client.get('characters/' + this.id + '/ship', 'v1');
+            this.ship = await client.get('characters/' + this.id + '/ship', 'v2');
             this.ship.type = await TypeHelper.resolveType(this.ship.ship_type_id);
 
             this.save();
@@ -616,7 +616,7 @@ class Character {
             await client.authChar(AuthorizedCharacter.get(this.id));
 
             try {
-                this.fatigue = await client.get('characters/' + this.id + '/fatigue', 'v1', 'esi-characters.read_fatigue.v1');
+                this.fatigue = await client.get('characters/' + this.id + '/fatigue', 'v2', 'esi-characters.read_fatigue.v1');
                 this.markRefreshed('fatigue');
             } catch (err) {
                 if (err === 'Scope missing') {
@@ -641,7 +641,7 @@ class Character {
                 this.loyalty_points = [];
                 for (let o of data) {
                     if (o.loyalty_points > 0) {
-                        o.corporation = await client.get('corporations/' + o.corporation_id, 'v4');
+                        o.corporation = await client.get('corporations/' + o.corporation_id, 'v5');
                         this.loyalty_points.push(o);
                     }
                 }
@@ -726,7 +726,7 @@ class Character {
             await client.authChar(AuthorizedCharacter.get(this.id));
 
             try {
-                const labels = await client.get('characters/' + this.id + '/mail/labels', 'v2', 'esi-mail.read_mail.v1');
+                const labels = await client.get('characters/' + this.id + '/mail/labels', 'v3', 'esi-mail.read_mail.v1');
 
                 const mailLabels = {};
                 for (const label of labels) {

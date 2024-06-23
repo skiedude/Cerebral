@@ -1,8 +1,8 @@
 'use strict';
 
 export default {
-    'version': '0.8.1',
-    'author_email': 'prometheussatyen@gmail.com',
+    'version': '0.8.2',
+    'author_email': 'skibumb@gmail.com',
 
     'eve_sso_url': 'https://login.eveonline.com/oauth',
     'eve_sso_url_no_oauth': 'https://login.eveonline.com',
@@ -10,7 +10,7 @@ export default {
     'eve_sso_v2_url': 'https://login.eveonline.com/v2/oauth',
     'eve_sso_url_v2_no_oauth': 'https://login.eveonline.com/v2',
 
-    'eve_sso_client_id': 'c9fde897cdfb45208fb5254e3ee98d19',
+    'eve_sso_client_id': '7b37de584b534b52b6666ad912cbe5cb',
 
     'scopes': [
         {
